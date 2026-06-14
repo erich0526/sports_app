@@ -8,11 +8,10 @@ import 'package:equatable/equatable.dart';
 // 為什麼不直接把 Match 當參數傳，而要包一層 Params？（提示：和 UseCase 的泛型設計有關）
 // 因為call()設計的時候參數就要帶「Params型態的params參數」( call(Params params) )
 class AddMatchParams extends Equatable {
-  // 建構子
-  const AddMatchParams({required this.match});
-  // 說明這個欄位代表什麼
+  // 建構子:說明這個欄位代表什麼
   // AddMatchParams 需要一個 match 才能運作，透過建構子把它傳進來，存成 final 欄位
   final Match match;
+  const AddMatchParams({required this.match});
 
   @override
   List<Object> get props => [match];
@@ -25,9 +24,8 @@ class AddMatch extends UseCase<void, AddMatchParams> {
   // 說明為什麼需要傳入 repository（依賴注入的概念）
   // 因為domain要跟data拿資料，但是domain不認識data
   // 所以domain只能透過定義repository interface才讓data去implement repository
-  AddMatch({required this.repository});
-
   final MatchRepository repository;
+  AddMatch({required this.repository});
 
   @override
   // 說明這個方法做了什麼事、params.match 是從哪裡來的
