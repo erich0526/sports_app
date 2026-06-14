@@ -9,8 +9,8 @@ import 'package:sports_app/core/usecases/usecase.dart';
 class GetMatches extends UseCase<List<Match>, NoParams> {
   // GetMatches 需要一個 MatchRepository 才能運作，透過建構子把它傳進來，存成 final 欄位
   // 建構子寫法一樣，建構子名稱必須和類別名稱一樣
-  GetMatches({required this.repository});
   final MatchRepository repository;
+  GetMatches({required this.repository});
 
   @override
   // 呼叫 repository.getMatches() 並回傳結果

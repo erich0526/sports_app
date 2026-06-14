@@ -3,6 +3,13 @@
 import 'package:equatable/equatable.dart';
 
 class Match extends Equatable {
+  final String id;
+  final String homeTeam;
+  final String guestTeam;
+  final int homeScore;
+  final int guestScore;
+  final DateTime date;
+
   const Match({
     required this.id,
     required this.homeTeam,
@@ -11,13 +18,6 @@ class Match extends Equatable {
     required this.guestScore,
     required this.date,
   });
-
-  final String id;
-  final String homeTeam;
-  final String guestTeam;
-  final int homeScore;
-  final int guestScore;
-  final DateTime date;
 
   @override
   List<Object> get props => [
