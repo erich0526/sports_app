@@ -7,6 +7,7 @@ import 'package:sports_app/features/match/domain/repositories/match_repository.d
 
 import 'package:sports_app/features/match/data/datasources/match_remote_datasource.dart';
 import 'package:sports_app/features/match/data/repositories/match_repository_impl.dart';
+import 'package:sports_app/features/match/presentation/bloc/match_bloc.dart';
 
 final sl = GetIt.instance; //sl 是慣例命名（service locator）
 
@@ -25,4 +26,6 @@ void init() {
   // UseCases
   sl.registerLazySingleton<GetMatches>(() => GetMatches(repository: sl()));
   sl.registerLazySingleton<AddMatch>(() => AddMatch(repository: sl()));
+  // 註冊 MatchBloc
+  sl.registerFactory(() => MatchBloc(getMatches: sl(), addMatch: sl()));
 }
