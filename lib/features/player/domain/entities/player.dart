@@ -10,10 +10,9 @@ class Player extends Equatable {
   final int assists; // 總助攻數
   final int steals; // 總抄截數
   final int blocks; // 總阻攻數
-
+  final int attempts; // 總投籃出手次數
   final int misses; // 總投籃落空次數
   final int turnovers; // 總失誤次數
-
   final int minutes; // 總上場時間
   final int matches; // 出賽場次
   final int wins; // 勝場數
@@ -28,6 +27,7 @@ class Player extends Equatable {
     required this.assists,
     required this.steals,
     required this.blocks,
+    required this.attempts,
     required this.misses,
     required this.turnovers,
     required this.minutes,
@@ -46,6 +46,7 @@ class Player extends Equatable {
     assists,
     steals,
     blocks,
+    attempts,
     misses,
     turnovers,
     minutes,
