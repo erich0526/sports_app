@@ -17,7 +17,8 @@ class PlayerEvaluation extends Equatable {
   final double avgSteals;
   final double avgBlocks;
   final int efficiency;
-  final double wRatio;
+  final double hitRatio;
+  final double winRatio;
   final double overallRate;
 
   const PlayerEvaluation({
@@ -27,7 +28,8 @@ class PlayerEvaluation extends Equatable {
     required this.avgSteals,
     required this.avgBlocks,
     required this.efficiency,
-    required this.wRatio,
+    required this.hitRatio,
+    required this.winRatio,
     required this.overallRate,
   });
 
@@ -39,7 +41,8 @@ class PlayerEvaluation extends Equatable {
     avgSteals,
     avgBlocks,
     efficiency,
-    wRatio,
+    hitRatio,
+    winRatio,
     overallRate,
   ];
 }
@@ -66,10 +69,12 @@ class EvaluatePlayer extends UseCase<PlayerEvaluation, EvaluatePlayerParams> {
             params.player.blocks) -
         (params.player.misses + params.player.turnovers);
 
-    final double wRatio =
+    final double hitRatio = 1 - (params.player.misses / params.player.attempts);
+
+    final double winRatio =
         params.player.wins / params.player.matches.clamp(1, 9999);
 
-    final double overallRate = efficiency * 0.7 + wRatio * 100 * 0.3;
+    final double overallRate = efficiency * 0.7 + winRatio * 100 * 0.3;
 
     return PlayerEvaluation(
       avgScores: avgScores,
@@ -78,7 +83,8 @@ class EvaluatePlayer extends UseCase<PlayerEvaluation, EvaluatePlayerParams> {
       avgSteals: avgSteals,
       avgBlocks: avgBlocks,
       efficiency: efficiency,
-      wRatio: wRatio,
+      hitRatio: hitRatio,
+      winRatio: winRatio,
       overallRate: overallRate,
     );
   }
