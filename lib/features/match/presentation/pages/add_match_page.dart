@@ -58,6 +58,7 @@ class _AddMatchPageState extends State<AddMatchPage> {
                 guestScore: int.parse(guestScoreController.text),
                 // 今天先簡化，直接用當下時間，不做日期選擇器
                 date: DateTime.now(),
+                playerIds: const [],
               );
               // 觸發 AddMatchEvent，MatchBloc 會去呼叫 AddMatch UseCase
               // 寫入 Firestore，成功後自動重新載入列表

@@ -9,6 +9,7 @@ class Match extends Equatable {
   final int homeScore;
   final int guestScore;
   final DateTime date;
+  final List<String> playerIds;
 
   const Match({
     required this.id,
@@ -17,6 +18,7 @@ class Match extends Equatable {
     required this.homeScore,
     required this.guestScore,
     required this.date,
+    required this.playerIds,
   });
 
   @override
@@ -27,5 +29,6 @@ class Match extends Equatable {
     homeScore,
     guestScore,
     date,
+    playerIds,
   ];
 }

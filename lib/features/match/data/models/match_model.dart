@@ -12,6 +12,7 @@ class MatchModel extends Match {
     required super.homeScore,
     required super.guestScore,
     required super.date,
+    required super.playerIds,
   });
 
   // Firestore 裡的欄位叫什麼名字，就用 json['那個名字'] 取值，而且型別要對應
@@ -23,6 +24,7 @@ class MatchModel extends Match {
       homeScore: (json['homeScore']).toInt(),
       guestScore: (json['guestScore']).toInt(),
       date: (json['date'] as Timestamp).toDate(),
+      playerIds: List<String>.from(json['playerIds'] ?? []),
     );
   }
   // toJson 回傳 Map<String, dynamic>，把五個欄位放進去（id 不用放，因為 id 是文件本身的識別碼，不是欄位內容）
@@ -33,6 +35,7 @@ class MatchModel extends Match {
       'homeScore': homeScore,
       'guestScore': guestScore,
       'date': date,
+      'playerIds': playerIds,
     };
   }
 }
