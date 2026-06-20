@@ -16,7 +16,7 @@ import 'package:sports_app/features/player/domain/usecases/evaluate_player.dart'
 import 'package:sports_app/features/player/domain/repositories/player_repository.dart';
 import 'package:sports_app/features/player/data/datasources/player_remote_datasource.dart';
 import 'package:sports_app/features/player/data/repositories/player_repository_impl.dart';
-// import 'package:sports_app/features/player/presentation/bloc/player_bloc.dart';
+import 'package:sports_app/features/player/presentation/bloc/player_bloc.dart';
 
 final sl = GetIt.instance; //sl 是慣例命名（service locator）
 
@@ -60,5 +60,11 @@ void init() {
   sl.registerLazySingleton<EvaluatePlayer>(() => EvaluatePlayer());
 
   // 註冊 PlayerBloc
-  // sl.registerFactory(() => PlayerBloc(GetPlayerStats: sl(), GetPlayers: sl()), EvaluatePlayer: sl());
+  sl.registerFactory(
+    () => PlayerBloc(
+      getPlayers: sl(),
+      getPlayerStats: sl(),
+      evaluatePlayer: sl(),
+    ),
+  );
 }

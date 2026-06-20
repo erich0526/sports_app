@@ -22,6 +22,7 @@ class MatchRepositoryImpl implements MatchRepository {
       homeScore: match.homeScore,
       guestScore: match.guestScore,
       date: match.date,
+      playerIds: match.playerIds,
     );
 
     await matchRemoteDataSource.addMatch(matchModel);
