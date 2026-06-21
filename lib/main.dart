@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'core/injection_container.dart';
 import 'features/match/presentation/pages/match_list_page.dart';
+// import 'features/player/presentation/pages/player_list_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +39,9 @@ class MyApp extends StatelessWidget {
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: const MatchListPage(),
       home: const MatchListPage(),
+      // home: const PlayerListPage(),
     );
   }
 }
