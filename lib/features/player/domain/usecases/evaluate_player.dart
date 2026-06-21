@@ -16,7 +16,9 @@ class PlayerEvaluation extends Equatable {
   final double avgRebounds;
   final double avgSteals;
   final double avgBlocks;
-  final int efficiency;
+  final double avgTurnover;
+  final double avgMisses;
+  final double efficiency;
   final double hitRatio;
   final double winRatio;
   final double overallRate;
@@ -27,6 +29,8 @@ class PlayerEvaluation extends Equatable {
     required this.avgRebounds,
     required this.avgSteals,
     required this.avgBlocks,
+    required this.avgTurnover,
+    required this.avgMisses,
     required this.efficiency,
     required this.hitRatio,
     required this.winRatio,
@@ -40,6 +44,8 @@ class PlayerEvaluation extends Equatable {
     avgRebounds,
     avgSteals,
     avgBlocks,
+    avgTurnover,
+    avgMisses,
     efficiency,
     hitRatio,
     winRatio,
@@ -60,14 +66,14 @@ class EvaluatePlayer extends UseCase<PlayerEvaluation, EvaluatePlayerParams> {
         params.player.steals / params.player.matches.clamp(1, 9999);
     final double avgBlocks =
         params.player.blocks / params.player.matches.clamp(1, 9999);
+    final double avgTurnover =
+        params.player.turnovers / params.player.matches.clamp(1, 9999);
+    final double avgMisses =
+        params.player.misses / params.player.matches.clamp(1, 9999);
 
-    final int efficiency =
-        (params.player.points +
-            params.player.rebounds +
-            params.player.assists +
-            params.player.steals +
-            params.player.blocks) -
-        (params.player.misses + params.player.turnovers);
+    final double efficiency =
+        (avgScores + avgRebounds + avgAssists + avgSteals + avgBlocks) -
+        (avgMisses + avgTurnover);
 
     final double hitRatio = 1 - (params.player.misses / params.player.attempts);
 
@@ -82,6 +88,8 @@ class EvaluatePlayer extends UseCase<PlayerEvaluation, EvaluatePlayerParams> {
       avgRebounds: avgRebounds,
       avgSteals: avgSteals,
       avgBlocks: avgBlocks,
+      avgTurnover: avgTurnover,
+      avgMisses: avgMisses,
       efficiency: efficiency,
       hitRatio: hitRatio,
       winRatio: winRatio,
