@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:sports_app/features/match/domain/entities/match.dart';
+import 'package:sports_app/features/match/domain/usecases/get_match_players.dart';
 
 // 宣告一個 abstract class，這是所有State的共同父類別
 abstract class MatchState extends Equatable {
@@ -36,4 +37,11 @@ class MatchError extends MatchState {
 
   @override
   List<Object> get props => [message];
+}
+
+class MatchPlayersLoaded extends MatchState {
+  final MatchWithPlayers matchWithPlayers;
+  const MatchPlayersLoaded({required this.matchWithPlayers});
+  @override
+  List<Object> get props => [matchWithPlayers];
 }

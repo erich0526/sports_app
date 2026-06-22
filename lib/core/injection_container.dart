@@ -1,18 +1,18 @@
 import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+// -----------------------match-----------------------
 import 'package:sports_app/features/match/domain/usecases/get_matches.dart';
 import 'package:sports_app/features/match/domain/usecases/add_match.dart';
+import 'package:sports_app/features/match/domain/usecases/get_match_players.dart';
 import 'package:sports_app/features/match/domain/repositories/match_repository.dart';
-
 import 'package:sports_app/features/match/data/datasources/match_remote_datasource.dart';
 import 'package:sports_app/features/match/data/repositories/match_repository_impl.dart';
 import 'package:sports_app/features/match/presentation/bloc/match_bloc.dart';
 
+// -----------------------player-----------------------
 import 'package:sports_app/features/player/domain/usecases/get_player.dart';
 import 'package:sports_app/features/player/domain/usecases/get_player_stats.dart';
 import 'package:sports_app/features/player/domain/usecases/evaluate_player.dart';
-
 import 'package:sports_app/features/player/domain/repositories/player_repository.dart';
 import 'package:sports_app/features/player/data/datasources/player_remote_datasource.dart';
 import 'package:sports_app/features/player/data/repositories/player_repository_impl.dart';
@@ -25,6 +25,7 @@ void init() {
   // Firestore 實例
   sl.registerLazySingleton(() => FirebaseFirestore.instance);
 
+  // -----------------------match-----------------------
   // Match DataSource
   sl.registerLazySingleton<MatchRemoteDataSource>(
     () => MatchRemoteDataSourceImpl(firestore: sl()),
@@ -38,10 +39,16 @@ void init() {
   // Match UseCases
   sl.registerLazySingleton<GetMatches>(() => GetMatches(repository: sl()));
   sl.registerLazySingleton<AddMatch>(() => AddMatch(repository: sl()));
+  sl.registerLazySingleton<GetMatchPlayers>(
+    () => GetMatchPlayers(matchRepository: sl(), playerRepository: sl()),
+  );
 
   // 註冊 MatchBloc
-  sl.registerFactory(() => MatchBloc(getMatches: sl(), addMatch: sl()));
+  sl.registerFactory(
+    () => MatchBloc(getMatches: sl(), addMatch: sl(), getMatchPlayers: sl()),
+  );
 
+  // -----------------------player-----------------------
   // Player DataSource
   sl.registerLazySingleton<PlayerRemoteDataSource>(
     () => PlayerRemoteDataSourceImpl(firestore: sl()),

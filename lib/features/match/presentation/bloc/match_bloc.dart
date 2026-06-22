@@ -4,10 +4,14 @@ import 'package:sports_app/features/match/presentation/bloc/match_state.dart';
 import 'package:sports_app/features/match/domain/usecases/add_match.dart';
 import 'package:sports_app/features/match/domain/usecases/get_matches.dart';
 import 'package:sports_app/core/usecases/usecase.dart';
+import 'package:sports_app/features/match/domain/usecases/get_match_players.dart';
 
 class MatchBloc extends Bloc<MatchEvent, MatchState> {
-  MatchBloc({required this.getMatches, required this.addMatch})
-    : super(MatchInitial()) {
+  MatchBloc({
+    required this.getMatches,
+    required this.addMatch,
+    required this.getMatchPlayers,
+  }) : super(MatchInitial()) {
     // 註冊 on<LoadMatchesEvent>
     on<LoadMatchesEvent>((event, emit) async {
       emit(MatchLoading());
@@ -37,8 +41,21 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
         emit(MatchError(message: e.toString()));
       }
     });
+
+    on<LoadMatchPlayersEvent>((event, emit) async {
+      try {
+        emit(MatchLoading());
+        final result = await getMatchPlayers(
+          GetMatchPlayersParams(matchId: event.matchId),
+        );
+        emit(MatchPlayersLoaded(matchWithPlayers: result));
+      } catch (e) {
+        emit(MatchError(message: e.toString()));
+      }
+    });
   }
 
   final GetMatches getMatches;
   final AddMatch addMatch;
+  final GetMatchPlayers getMatchPlayers;
 }

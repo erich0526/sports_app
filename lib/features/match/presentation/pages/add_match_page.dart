@@ -6,13 +6,14 @@ import 'package:sports_app/features/match/domain/entities/match.dart';
 
 // State 類別不需要建構子，也沒有 key 這個概念（key 是給 Widget 用的）
 class _AddMatchPageState extends State<AddMatchPage> {
-  // 四個輸入框各自對應一個 controller，負責讀取使用者輸入的文字
+  // 輸入框各自對應一個 controller，負責讀取使用者輸入的文字
   final homeTeamController = TextEditingController();
   final guestTeamController = TextEditingController();
   final homeScoreController = TextEditingController();
   final guestScoreController = TextEditingController();
+  final playerIdsController = TextEditingController();
 
-  // 頁面關閉時釋放四個 controller，避免記憶體洩漏
+  // 頁面關閉時釋放 controller，避免記憶體洩漏
   // (跟 Bloc 要 close() 是同一種概念，凡是長期持有資源的物件用完都要釋放)
   @override
   void dispose() {
@@ -20,6 +21,7 @@ class _AddMatchPageState extends State<AddMatchPage> {
     guestTeamController.dispose();
     homeScoreController.dispose();
     guestScoreController.dispose();
+    playerIdsController.dispose();
     super.dispose();
   }
 
@@ -30,18 +32,33 @@ class _AddMatchPageState extends State<AddMatchPage> {
       body: Column(
         children: [
           // 主場隊伍名稱輸入框
-          TextField(controller: homeTeamController),
+          TextField(
+            controller: homeTeamController,
+            decoration: const InputDecoration(labelText: '主場隊伍'),
+          ),
           // 客場隊伍名稱輸入框
-          TextField(controller: guestTeamController),
+          TextField(
+            controller: guestTeamController,
+            decoration: const InputDecoration(labelText: '客場隊伍'),
+          ),
           // 主場分數輸入框，限制鍵盤只能輸入數字
           TextField(
             controller: homeScoreController,
             keyboardType: TextInputType.number,
+            decoration: const InputDecoration(hintText: '主場分數'),
           ),
           // 客場分數輸入框，限制鍵盤只能輸入數字
           TextField(
             controller: guestScoreController,
             keyboardType: TextInputType.number,
+            decoration: const InputDecoration(hintText: '客場分數'),
+          ),
+          TextField(
+            controller: playerIdsController,
+            decoration: const InputDecoration(
+              labelText: '球員 ID（逗號分隔）',
+              hintText: 'player1,player2',
+            ),
           ),
           // 新增按鈕
           ElevatedButton(
@@ -58,7 +75,12 @@ class _AddMatchPageState extends State<AddMatchPage> {
                 guestScore: int.parse(guestScoreController.text),
                 // 今天先簡化，直接用當下時間，不做日期選擇器
                 date: DateTime.now(),
-                playerIds: const [],
+                playerIds: playerIdsController.text.isEmpty
+                    ? []
+                    : playerIdsController.text
+                          .split(',')
+                          .map((e) => e.trim())
+                          .toList(),
               );
               // 觸發 AddMatchEvent，MatchBloc 會去呼叫 AddMatch UseCase
               // 寫入 Firestore，成功後自動重新載入列表

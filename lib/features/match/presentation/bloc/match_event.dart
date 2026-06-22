@@ -23,3 +23,10 @@ class AddMatchEvent extends MatchEvent {
   @override
   List<Object> get props => [match];
 }
+
+class LoadMatchPlayersEvent extends MatchEvent {
+  final String matchId;
+  const LoadMatchPlayersEvent({required this.matchId});
+  @override
+  List<Object> get props => [matchId];
+}
