@@ -27,4 +27,9 @@ class MatchRepositoryImpl implements MatchRepository {
 
     await matchRemoteDataSource.addMatch(matchModel);
   }
+
+  @override
+  Future<MatchModel> getMatch(String id) async {
+    return await matchRemoteDataSource.getMatch(id);
+  }
 }

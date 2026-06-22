@@ -5,6 +5,7 @@ import 'package:sports_app/features/match/presentation/bloc/match_bloc.dart';
 import 'package:sports_app/features/match/presentation/bloc/match_event.dart';
 import 'package:sports_app/features/match/presentation/bloc/match_state.dart';
 import 'package:sports_app/features/match/presentation/pages/add_match_page.dart';
+import 'package:sports_app/features/match/presentation/pages/match_detail_page.dart';
 
 // 賽事列表頁面，不需要自己的內部狀態，畫面完全由 MatchBloc 的 State 決定
 class MatchListPage extends StatelessWidget {
@@ -46,6 +47,15 @@ class MatchListPage extends StatelessWidget {
                         subtitle: Text(
                           '${match.homeScore} : ${match.guestScore}',
                         ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (innerContext) =>
+                                  MatchDetailPage(match: match),
+                            ),
+                          );
+                        },
                       );
                     },
                   );
