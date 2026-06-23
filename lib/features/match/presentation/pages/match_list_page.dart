@@ -33,6 +33,9 @@ class MatchListPage extends StatelessWidget {
                 }
                 // 載入完成：顯示賽事列表
                 if (state is MatchLoaded) {
+                  if (state.matches.isEmpty) {
+                    return const Center(child: Text('目前沒有賽事資料'));
+                  }
                   return ListView.builder(
                     // state is MatchLoaded 之後，Dart 自動把 state 當作
                     // MatchLoaded 型別使用，所以可以直接取 state.matches

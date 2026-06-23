@@ -23,6 +23,9 @@ class PlayerListPage extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (state is PlayersLoaded) {
+                  if (state.players.isEmpty) {
+                    return const Center(child: Text('目前沒有球員資料'));
+                  }
                   return ListView.builder(
                     itemCount: state.players.length,
                     itemBuilder: (context, index) {
@@ -33,11 +36,6 @@ class PlayerListPage extends StatelessWidget {
                         onTap: () {
                           final bloc = context.read<PlayerBloc>();
                           bloc.add(GetPlayerStatsEvent(id: player.id));
-
-                          // context.read<PlayerBloc>().add(
-                          //   GetPlayerStatsEvent(id: player.id),
-                          // );
-
                           Navigator.push(
                             context,
                             MaterialPageRoute(

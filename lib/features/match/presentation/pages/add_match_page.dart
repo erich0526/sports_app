@@ -63,6 +63,15 @@ class _AddMatchPageState extends State<AddMatchPage> {
           // 新增按鈕
           ElevatedButton(
             onPressed: () {
+              if (homeTeamController.text.isEmpty ||
+                  guestTeamController.text.isEmpty ||
+                  homeScoreController.text.isEmpty ||
+                  guestScoreController.text.isEmpty) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text('請填寫所有欄位')));
+                return;
+              }
               // 用四個 controller 的 .text 組成一個新的 Match 物件
               final newMatch = Match(
                 // id 給空字串，因為 Firestore 會自動產生真正的文件 ID
