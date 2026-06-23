@@ -36,6 +36,9 @@ class MatchDetailPage extends StatelessWidget {
                 if (state is MatchLoading) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is MatchPlayersLoaded) {
+                  if (state.matchWithPlayers.players.isEmpty) {
+                    return const Center(child: Text('本場賽事尚未加入球員'));
+                  }
                   return Column(
                     children: [
                       // -----------------賽事資訊-----------------
