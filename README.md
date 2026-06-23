@@ -6,14 +6,14 @@ A Flutter mobile application for managing sports matches and player statistics, 
 
 ## 技術棧 Tech Stack
 
-| 類別 | 技術 |
-|------|------|
-| Framework | Flutter (Dart) |
-| Architecture | Clean Architecture · Feature-first |
-| State Management | flutter_bloc |
-| Dependency Injection | get_it |
-| Database | Firebase Firestore |
-| Version Control | GitHub Flow |
+| 類別                 | 技術                               |
+| -------------------- | ---------------------------------- |
+| Framework            | Flutter (Dart)                     |
+| Architecture         | Clean Architecture · Feature-first |
+| State Management     | flutter_bloc                       |
+| Dependency Injection | get_it                             |
+| Database             | Firebase Firestore                 |
+| Version Control      | GitHub Flow                        |
 
 ---
 
@@ -38,10 +38,10 @@ presentation  ──→  domain  ←──  data
 
 以**功能模組（functional domain）** 為單位區分，目前包含兩個 feature：
 
-| Feature | 說明 |
-|---------|------|
-| `match` | 賽事列表、新增賽事、賽事詳情 |
-| `player` | 球員列表、個人頁面、數據統計與評估 |
+| Feature  | 說明                                       |
+| -------- | ------------------------------------------ |
+| `match`  | 賽事列表、新增賽事、賽事詳情（含上場球員） |
+| `player` | 球員列表、個人頁面、數據統計與評估         |
 
 每個 feature 各自獨立，包含完整的 data / domain / presentation 三層，修改其中一個不影響另一個。
 
@@ -74,7 +74,8 @@ lib/
 │   │   │   │   └── match_repository.dart
 │   │   │   └── usecases/
 │   │   │       ├── get_matches.dart
-│   │   │       └── add_match.dart
+│   │   │       ├── add_match.dart
+│   │   │       └── get_match_players.dart
 │   │   └── presentation/
 │   │       ├── bloc/
 │   │       │   ├── match_bloc.dart
@@ -82,6 +83,7 @@ lib/
 │   │       │   └── match_state.dart
 │   │       └── pages/
 │   │           ├── match_list_page.dart
+│   │           ├── match_detail_page.dart
 │   │           └── add_match_page.dart
 │   │
 │   └── player/
@@ -98,6 +100,7 @@ lib/
 │       │   ├── repositories/
 │       │   │   └── player_repository.dart
 │       │   └── usecases/
+│       │       ├── get_player.dart
 │       │       ├── get_player_stats.dart
 │       │       └── evaluate_player.dart
 │       └── presentation/
@@ -117,15 +120,31 @@ lib/
 ## 功能說明 Features
 
 ### 賽事管理 Match Management
+
 - 瀏覽所有賽事列表
-- 新增賽事（日期、對戰隊伍、比分）
+- 新增賽事（對戰隊伍、比分、球員 ID）
+- 點擊賽事進入詳情頁，顯示上場球員列表
 - 資料即時同步至 Firebase Firestore
 
 ### 球員管理 Player Management
+
 - 瀏覽球員列表
-- 球員個人頁面（基本資料、照片）
-- 數據統計（出賽場次、進球、助攻）
-- 綜合表現評估（自訂加權公式）
+- 球員個人頁面（基本資料、生涯數據）
+- 場均數據統計（得分、籃板、助攻、抄截、阻攻）
+- 綜合表現評估（命中率、勝率、效率值、總評分）
+- 從賽事詳情頁點擊球員可直接進入個人頁面
+
+---
+
+## 截圖 Screenshots
+
+| 賽事列表                                       | 賽事詳情                                         | 球員個人數據                                           |
+| ---------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------ |
+| ![賽事列表](assets/screenshots/match_list.png) | ![賽事詳情](assets/screenshots/match_detail.png) | ![球員個人數據](assets/screenshots/player_profile.png) |
+
+| 新增賽事                                      | 空白狀態                                               |
+| --------------------------------------------- | ------------------------------------------------------ |
+| ![新增賽事](assets/screenshots/add_match.png) | ![空白狀態](assets/screenshots/match_detail_empty.png) |
 
 ---
 
@@ -142,8 +161,8 @@ lib/
 1. Clone 此 repo：
 
 ```bash
-git clone https://github.com/your-username/sports-app.git
-cd sports-app
+git clone https://github.com/erich0526/sports_app.git
+cd sports_app
 ```
 
 2. 安裝套件：
@@ -175,8 +194,10 @@ flutter run
 main（永遠可執行）
   ├── feature/match-domain-data
   ├── feature/match-presentation
-  ├── feature/player-domain-data
-  └── feature/player-presentation
+  ├── feature/player-domain
+  ├── feature/player-data
+  ├── feature/player-pages
+  └── feature/match-detail-page
 ```
 
 - `main` branch 永遠保持可正常執行的狀態
@@ -199,16 +220,11 @@ docs(readme): update folder structure section
 
 ```yaml
 dependencies:
-  flutter_bloc: ^8.1.3
-  get_it: ^7.6.4
-  firebase_core: ^2.24.2
-  cloud_firestore: ^4.14.0
+  flutter_bloc: ^9.1.1
+  get_it: ^9.2.1
+  firebase_core: ^4.10.0
+  cloud_firestore: ^6.5.0
   equatable: ^2.0.5
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  bloc_test: ^9.1.5
 ```
 
 ---
