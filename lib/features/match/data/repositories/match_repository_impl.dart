@@ -14,7 +14,7 @@ class MatchRepositoryImpl implements MatchRepository {
   }
 
   @override
-  Future<void> addMatch(Match match) async {
+  Future<String> addMatch(Match match) async {
     final matchModel = MatchModel(
       id: match.id,
       homeTeam: match.homeTeam,
@@ -24,8 +24,7 @@ class MatchRepositoryImpl implements MatchRepository {
       date: match.date,
       playerIds: match.playerIds,
     );
-
-    await matchRemoteDataSource.addMatch(matchModel);
+    return await matchRemoteDataSource.addMatch(matchModel);
   }
 
   @override

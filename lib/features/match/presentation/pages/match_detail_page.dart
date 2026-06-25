@@ -13,6 +13,10 @@ import 'package:sports_app/features/player/presentation/bloc/player_bloc.dart';
 import 'package:sports_app/features/player/presentation/bloc/player_event.dart';
 import 'package:sports_app/features/player/presentation/pages/player_profile_page.dart';
 
+// -----------------player_match_stats-----------------
+import 'package:sports_app/features/player_match_stats/domain/entities/player_match_stats.dart';
+import 'package:sports_app/features/player_match_stats/domain/usecases/get_match_stats.dart';
+
 class MatchDetailPage extends StatelessWidget {
   const MatchDetailPage({super.key, required this.match});
   final Match match;
@@ -36,6 +40,11 @@ class MatchDetailPage extends StatelessWidget {
                 if (state is MatchLoading) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is MatchPlayersLoaded) {
+                  final statsFuture = sl<GetMatchStats>()(
+                    GetMatchStatsParams(
+                      matchId: state.matchWithPlayers.match.id,
+                    ),
+                  );
                   if (state.matchWithPlayers.players.isEmpty) {
                     return const Center(child: Text('本場賽事尚未加入球員'));
                   }
@@ -58,8 +67,26 @@ class MatchDetailPage extends StatelessWidget {
                                 state.matchWithPlayers.players[index];
                             return ListTile(
                               title: Text(player.name),
-                              subtitle: Text(player.position),
+                              subtitle: FutureBuilder<List<PlayerMatchStats>>(
+                                future: statsFuture,
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Text('載入中...');
+                                  }
+                                  final statsList = snapshot.data!;
+                                  final stats = statsList
+                                      .where((s) => s.playerId == player.id)
+                                      .firstOrNull;
+                                  if (stats == null) {
+                                    return Text(player.position);
+                                  }
+                                  return Text(
+                                    '${player.position}｜本場：${stats.points}分 ${stats.rebounds}籃板 ${stats.assists}助攻 ${stats.steals}抄截 ${stats.blocks}阻攻',
+                                  );
+                                },
+                              ),
                               onTap: () {
+                                // ← 放在 ListTile 這一層
                                 final bloc = context.read<PlayerBloc>();
                                 bloc.add(GetPlayerStatsEvent(id: player.id));
                                 Navigator.push(
