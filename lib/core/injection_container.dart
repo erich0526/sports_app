@@ -18,6 +18,13 @@ import 'package:sports_app/features/player/data/datasources/player_remote_dataso
 import 'package:sports_app/features/player/data/repositories/player_repository_impl.dart';
 import 'package:sports_app/features/player/presentation/bloc/player_bloc.dart';
 
+// -----------------------player_match_stats-----------------------
+import 'package:sports_app/features/player_match_stats/data/datasources/player_match_stats_datasource.dart';
+import 'package:sports_app/features/player_match_stats/data/repositories/player_match_stats_repository_impl.dart';
+import 'package:sports_app/features/player_match_stats/domain/repositories/player_match_stats_repository.dart';
+import 'package:sports_app/features/player_match_stats/domain/usecases/add_match_stats.dart';
+import 'package:sports_app/features/player_match_stats/domain/usecases/get_match_stats.dart';
+
 final sl = GetIt.instance; //sl 是慣例命名（service locator）
 
 void init() {
@@ -73,5 +80,19 @@ void init() {
       getPlayerStats: sl(),
       evaluatePlayer: sl(),
     ),
+  );
+
+  // -----------------------player_match_stats-----------------------
+  sl.registerLazySingleton<PlayerMatchStatsDatasource>(
+    () => PlayerMatchStatsDatasourceImpl(firestore: sl()),
+  );
+  sl.registerLazySingleton<PlayerMatchStatsRepository>(
+    () => PlayerMatchStatsRepositoryImpl(playerMatchStatsDatasource: sl()),
+  );
+  sl.registerLazySingleton<GetMatchStats>(
+    () => GetMatchStats(repository: sl()),
+  );
+  sl.registerLazySingleton<AddMatchStats>(
+    () => AddMatchStats(repository: sl()),
   );
 }

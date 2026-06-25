@@ -20,7 +20,7 @@ class AddMatchParams extends Equatable {
 // UseCase<新增賽事的型別, 參數型別>
 // 新增賽事的型別 → void，因為Future<void> addMatch(Match match)
 // 參數型別 → AddMatchParams，因為AddMatchParams
-class AddMatch extends UseCase<void, AddMatchParams> {
+class AddMatch extends UseCase<String, AddMatchParams> {
   // 說明為什麼需要傳入 repository（依賴注入的概念）
   // 因為domain要跟data拿資料，但是domain不認識data
   // 所以domain只能透過定義repository interface才讓data去implement repository
@@ -30,7 +30,7 @@ class AddMatch extends UseCase<void, AddMatchParams> {
   @override
   // 說明這個方法做了什麼事、params.match 是從哪裡來的
   // 呼叫 repository.addMatch(params.match) 並回傳結果。params.match 是從AddMatchParams來的
-  Future<void> call(AddMatchParams params) async {
+  Future<String> call(AddMatchParams params) async {
     return await repository.addMatch(params.match);
   }
 }
